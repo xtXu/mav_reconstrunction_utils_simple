@@ -1,0 +1,7 @@
+<launch>
+	<!-- BBox Computer -->
+	<node pkg="active_3d_planning_app_reconstruction" type="bounding_box_computer.py" name="bbox_computer" output="screen"/>
+
+  <!-- RVIZ-->
+	<node type="rviz" name="rviz_bbox" pkg="rviz" args="-d $(find active_3d_planning_app_reconstruction)/cfg/bounding_box_computer.rviz"/>
+</launch>
