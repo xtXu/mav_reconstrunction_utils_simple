@@ -15,6 +15,7 @@ from sensor_msgs.msg import PointCloud2
 from std_msgs.msg import String
 from std_srvs.srv import SetBool
 from voxblox_msgs.srv import FilePath
+from nav_msgs.msg import Path
 
 
 class EvalData(object):
@@ -41,6 +42,10 @@ class EvalData(object):
 
         self.eval_walltime_0 = None
         self.eval_rostime_0 = None
+
+        self.start = False
+        self.trigger_sub = rospy.Subscriber("/waypoint_generator/waypoints", Path, self.trigger_callback, queue_size=10)
+        
 
         if self.evaluate:
             # Setup parameters
@@ -104,9 +109,6 @@ class EvalData(object):
             rospy.on_shutdown(self.eval_finish)
             self.collided = False
 
-        self.launch_simulation()
-
-    def launch_simulation(self):
         rospy.loginfo(
             "Experiment setup: waiting for unreal MAV simulation to setup...")
         # Wait for unreal simulation to setup
@@ -123,6 +125,9 @@ class EvalData(object):
             rospy.wait_for_message("unreal_simulation_ready", String)
         rospy.loginfo("Waiting for unreal MAV simulation to setup... done.")
 
+        # self.launch_simulation()
+
+    def launch_simulation(self):
         # Launch planner (by service, every planner needs to advertise this
         # service when ready)
         rospy.loginfo("Waiting for planner to be ready...")
@@ -242,6 +247,12 @@ class EvalData(object):
     def ue_out_callback(self, _):
         if self.evaluate:
             self.eval_n_pointclouds += 1
+
+    def trigger_callback(self, _):
+        if self.start:
+            return
+        self.start = True
+        self.launch_simulation()
 
     def stop_experiment(self, reason):
         # Shutdown the node with proper logging, only required when experiment
