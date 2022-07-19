@@ -125,11 +125,6 @@ class EvalData(object):
             rospy.wait_for_message("unreal_simulation_ready", String)
         rospy.loginfo("Waiting for unreal MAV simulation to setup... done.")
 
-        # self.launch_simulation()
-
-    def launch_simulation(self):
-        # Launch planner (by service, every planner needs to advertise this
-        # service when ready)
         rospy.loginfo("Waiting for planner to be ready...")
         if self.startup_timeout > 0.0:
             try:
@@ -149,6 +144,12 @@ class EvalData(object):
             rospy.sleep(self.planner_delay)
         else:
             rospy.loginfo("Waiting for planner to be ready... done.")
+
+        # self.launch_simulation()
+
+    def launch_simulation(self):
+        # Launch planner (by service, every planner needs to advertise this
+        # service when ready)
         run_planner_srv = rospy.ServiceProxy(
             self.ns_planner + "/toggle_running", SetBool)
         run_planner_srv(True)
