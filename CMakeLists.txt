@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(active_3d_planning_app_reconstruction)
+project(mav_reconstrunction_utils_simple)
 
 find_package(catkin_simple REQUIRED)
 
