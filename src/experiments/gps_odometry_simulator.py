@@ -9,7 +9,8 @@ import numpy as np
 # ros
 import rospy
 import tf
-from active_3d_planning_app_reconstruction.msg import OdometryOffset
+# from active_3d_planning_app_reconstruction.msg import OdometryOffset
+from mav_reconstrunction_utils_simple.msg import OdometryOffset
 from nav_msgs.msg import Odometry
 
 
